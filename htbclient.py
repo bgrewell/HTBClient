@@ -4,7 +4,6 @@ from bs4 import BeautifulSoup
 
 class HTBClient(object):
 
-    main_url = "https://www.hackthebox.eu"
     login_url = "https://www.hackthebox.eu/login"
     session = None
     headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.98 Safari/537.36", 'Referer': "https://www.hackthebox.eu/"}
@@ -16,7 +15,7 @@ class HTBClient(object):
     def Login(self, username, password):
         data = {}
         self.session = requests.Session()
-        response = self.session.get(self.main_url)
+        self.session.headers.update(self.headers)
         response = self.session.get(self.login_url)
         soup = BeautifulSoup(response.text)
         self.csrf_token = soup.find('input', {'name': '_token'})['value']
