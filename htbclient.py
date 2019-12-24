@@ -1,7 +1,114 @@
 import os
+import json
 import requests
 from bs4 import BeautifulSoup
 
+class MachineDetails:
+
+    def __init__(self, id, name, os, ip, avatar, avatar_thumb, points, release, retired_date, maker, maker2, ratings_pro, ratings_sucks, user_blood, root_blood, user_owns, root_owns):
+        self.id = id
+        self.name = name
+        self.os = os
+        self.ip = ip
+        self.avatar = avatar
+        self.avatar_thumb = avatar_thumb
+        self.points = points
+        self.release = release
+        self.retired_date = retired_date
+        self.maker = maker
+        self.maker2 = maker2
+        self.ratings_pro = ratings_pro
+        self.ratings_sucks = ratings_sucks
+        self.user_blood = user_blood
+        self.root_blood = root_blood
+        self.user_owns = user_owns
+        self.root_owns = root_owns
+
+    @staticmethod
+    def json_to_machinedetails(json_dict):
+        md = MachineDetails(
+            json_dict['id'],
+            json_dict['name'],
+            json_dict['os'],
+            json_dict['ip'],
+            json_dict['avatar'],
+            json_dict['avatar_thumb'],
+            json_dict['points'],
+            json_dict['release'],
+            json_dict['retired_date'],
+            json_dict['maker'],
+            json_dict['maker2'],
+            json_dict['ratings_pro'],
+            json_dict['ratings_sucks'],
+            json_dict['user_blood'],
+            json_dict['root_blood'],
+            json_dict['user_owns'],
+            json_dict['root_owns'],
+        )
+        return md
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+class Machine:
+    """
+    Class to represent the HTB machines
+    """
+    def __init__(self, id, name, os, ip, avatar_thumb, points, release, retired_date, maker, maker2, rating, user_owns, root_owns, retired, free):
+        self.id = id
+        self.name = name
+        self.os = os
+        self.ip = ip
+        self.avatar_thumb = avatar_thumb
+        self.points = points
+        self.release = release
+        self.retire_date = retired_date
+        self.maker = maker
+        self.maker2 = maker2
+        self.rating = rating
+        self.user_owns = user_owns
+        self.root_owns = root_owns
+        self.retired = retired
+        self.free = free
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
+    def obj_to_dict(self):
+        obj_dict = {
+            "__class__": self.__class__.__name__,
+            "__module__": self.__module__
+        }
+
+        obj_dict.update(self.__dict__)
+        return obj_dict
+
+    @staticmethod
+    def json_to_machine(json_dict):
+        m = Machine(
+            json_dict['id'],
+            json_dict['name'],
+            json_dict['os'],
+            json_dict['ip'],
+            json_dict['avatar_thumb'],
+            json_dict['points'],
+            json_dict['release'],
+            json_dict['retired_date'],
+            json_dict['maker'],
+            json_dict['maker2'],
+            json_dict['rating'],
+            json_dict['user_owns'],
+            json_dict['root_owns'],
+            json_dict['retired'],
+            json_dict['free'],
+        )
+        return m
 
 class HTBClient(object):
 
@@ -36,11 +143,25 @@ class HTBClient(object):
         return self.logged_in
 
     def list_machines(self):
-        list_machines_url = 'https://www.hackthebox.eu/api/machines/get/all'
         if not self.logged_in:
             raise ConnectionError('You are not logged in. You must first call login()')
+        list_machines_url = 'https://www.hackthebox.eu/api/machines/get/all'
         response = self.session.get(list_machines_url, verify=self.verify_cert)
-        print(response.text)
+        machines_json = response.json()
+        machines = []
+        for machine_json in machines_json:
+            machine = Machine.json_to_machine(machine_json)
+            machines.append(machine)
+        return machines
+
+    def get_machine(self, id):
+        if not self.logged_in:
+            raise ConnectionError('You are not logged in. You must first call login()')
+        url = "https://www.hackthebox.eu/api/machines/get/{id}".format(id=id)
+        response = self.session.get(url, verify=self.verify_cert)
+        machine = MachineDetails.json_to_machinedetails(response.json())
+        return machine
+
 
 
 if __name__ == '__main__':
@@ -48,7 +169,10 @@ if __name__ == '__main__':
     htb_user = os.getenv('HTB_USER')
     htb_pass = os.getenv('HTB_PASS')
 
-    client = HTBClient(verify_cert=False)
+    client = HTBClient()
     logged_in = client.login(htb_user, htb_pass)
     print("Logged in: " + str(logged_in))
-    client.list_machines()
+    machines = client.list_machines()
+    print("machines" + str(machines))
+    machine = client.get_machine(1)
+    print(machine)
