@@ -13,7 +13,7 @@ run the script as normal.
 
 Example
 ```
-export HTB_USER=<username>
-export HTB_PASS=<password>
+export HTB_USER=bob@somewebsite.net
+export HTB_PASS=2jli9z9e2l34jlz98890@skx9!2a&
 python3 htbclient.py <command> <arguments>
 ```
