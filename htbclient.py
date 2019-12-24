@@ -115,7 +115,10 @@ class HTBClient(object):
 
     def __init__(self, verify_cert=True):
         self.verify_cert = verify_cert
-        pass
+        if "HTB_NO_CERTCHECK" in os.environ:
+            self.verify_cert = False
+        if "HTB_USER_AGENT" in os.environ:
+            self.additional_headers = {'user-agent': os.getenv('HTB_USER_AGENT')}
 
     def login(self, username, password):
         self.session = requests.Session()
@@ -251,7 +254,7 @@ if __name__ == '__main__':
     htb_user = os.getenv('HTB_USER')
     htb_pass = os.getenv('HTB_PASS')
 
-    client = HTBClient(verify_cert=False)
+    client = HTBClient()
     logged_in = client.login(htb_user, htb_pass)
     machines = client.list_machines()
     for i in range(0, len(machines)):
