@@ -3,3 +3,4 @@ venv
 dist
 build
 HTBClient.egg-info
+**/__pycache__
