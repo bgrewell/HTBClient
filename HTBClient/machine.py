@@ -14,7 +14,7 @@ class Machine:
         self.avatar_thumb = avatar_thumb
         self.points = points
         self.release = release
-        self.retire_date = retired_date
+        self.retired_date = retired_date
         self.maker = maker
         self.maker2 = maker2
         self.rating = rating
