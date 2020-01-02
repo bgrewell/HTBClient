@@ -22,6 +22,8 @@ class Machine:
         self.root_owns = root_owns
         self.retired = retired
         self.free = free
+        self.owned_user = False
+        self.owned_root = False
 
     def __str__(self):
         return self.name
