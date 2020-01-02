@@ -6,6 +6,9 @@ from bs4 import BeautifulSoup
 from HTBClient.machine import Machine
 from HTBClient.machinedetails import MachineDetails
 from HTBClient.own import Own
+from HTBClient.spawned import Spawned
+from HTBClient.assigned import Assigned
+from HTBClient.terminating import Terminating
 
 
 class Client(object):
@@ -65,8 +68,17 @@ class Client(object):
         machines_json = response.json()
         machines = {}
         owns = self.owns()
+        spawned = self.spawned()
+        assigned = self.assigned()
+        terminating = self.terminating()
         for machine_json in machines_json:
             machine = Machine.json_to_machine(self.session, self.verify_cert, machine_json)
+            if machine.identifier in terminating:
+                machine.terminating = terminating[machine.identifier].terminating
+            if machine.identifier in assigned:
+                machine.assigned = assigned[machine.identifier].assigned
+            if machine.identifier in spawned:
+                machine.spawned = spawned[machine.identifier].spawned
             if machine.identifier in owns:
                 machine.owned_user = owns[machine.identifier].owned_user
                 machine.owned_root = owns[machine.identifier].owned_root
@@ -118,17 +130,32 @@ class Client(object):
     def spawned(self):
         url = 'https://www.hackthebox.eu/api/machines/spawned'
         response = self.session.get(url, verify=self.verify_cert)
-        return response.json()
+        spawned_json = response.json()
+        spawned = {}
+        for spawn_json in spawned_json:
+            s = Spawned.json_to_spawned(spawn_json)
+            spawned[s.identifier] = s
+        return spawned
 
     def terminating(self):
         url = 'https://www.hackthebox.eu/api/machines/terminating'
         response = self.session.get(url, verify=self.verify_cert)
-        return response.json()
+        terminating_json = response.json()
+        terminating = {}
+        for terminate_json in terminating_json:
+            t = Terminating.json_to_terminating(terminate_json)
+            terminating[t.identifier] = t
+        return terminating
 
     def assigned(self):
         url = 'https://www.hackthebox.eu/api/machines/assigned'
         response = self.session.get(url, verify=self.verify_cert)
-        return response.json()
+        assigned_json = response.json()
+        assigned = {}
+        for assign_json in assigned_json:
+            a = Assigned.json_to_assigned(assign_json)
+            assigned[a.identifier] = a
+        return assigned
 
     def expiry(self):
         url = 'https://www.hackthebox.eu/api/machines/expiry'
