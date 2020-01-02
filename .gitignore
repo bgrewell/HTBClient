@@ -4,3 +4,4 @@ dist
 build
 HTBClient.egg-info
 **/__pycache__
+publish.md
