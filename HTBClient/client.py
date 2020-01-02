@@ -5,6 +5,7 @@ import requests
 from bs4 import BeautifulSoup
 from HTBClient.machine import Machine
 from HTBClient.machinedetails import MachineDetails
+from HTBClient.own import Own
 
 
 class Client(object):
@@ -45,15 +46,40 @@ class Client(object):
         return self.logged_in
 
     def machines(self):
+        return self.__machines()
+
+    def machines_free(self):
+        return self.__machines(free_only=True)
+
+    def machines_active(self, skip_owned=False):
+        return self.__machines(active_only=True, skip_owned=skip_owned)
+
+    def machines_retired(self):
+        return self.__machines(retired_only=True)
+
+    def __machines(self, active_only=False, retired_only=False, free_only=False, skip_owned=False):
         if not self.logged_in:
             raise ConnectionError('You are not logged in. You must first call login()')
         list_machines_url = 'https://www.hackthebox.eu/api/machines/get/all'
         response = self.session.get(list_machines_url, verify=self.verify_cert)
         machines_json = response.json()
         machines = {}
+        owns = self.owns()
         for machine_json in machines_json:
             machine = Machine.json_to_machine(self.session, self.verify_cert, machine_json)
-            machines[machine.name.lower()] = machine
+            if machine.identifier in owns:
+                machine.owned_user = owns[machine.identifier].owned_user
+                machine.owned_root = owns[machine.identifier].owned_root
+            if skip_owned and machine.owned_user and machine.owned_root:
+                continue
+            if active_only and not machine.retired:
+                machines[machine.name.lower()] = machine
+            elif retired_only and machine.retired:
+                machines[machine.name.lower()] = machine
+            elif free_only and machine.free:
+                machines[machine.name.lower()] = machine
+            else:
+                machines[machine.name.lower()] = machine
         return machines
 
     def machine_details(self, identifier):
@@ -67,7 +93,12 @@ class Client(object):
     def owns(self):
         url = 'https://www.hackthebox.eu/api/machines/owns'
         response = self.session.get(url, verify=self.verify_cert)
-        return response.json()
+        owns_json = response.json()
+        owns = {}
+        for own_json in owns_json:
+            own = Own.json_to_own(own_json)
+            owns[own.identifier] = own
+        return owns
 
     def difficulty(self):
         url = 'https://www.hackthebox.eu/api/machines/difficulty'
@@ -108,3 +139,25 @@ class Client(object):
         url = 'https://www.hackthebox.eu/api/machines/resetting'
         response = self.session.get(url, verify=self.verify_cert)
         return response.json()
+
+    def user_owns(self):
+        return self.__machine_owns(include_user=True)
+
+    def root_owns(self):
+        return self.__machine_owns(include_root=True)
+
+    def complete_owns(self):
+        return self.__machine_owns(include_user=True, include_root=True)
+
+    def __machine_owns(self, include_user=False, include_root=False):
+        machines = self.machines()
+        owned_machines = {}
+        if not include_root and not include_user:
+            return owned_machines  # Doesn't really make sense to ask for owns but exclude both types
+        for key, machine in machines.items():
+            if include_root and not machine.owned_root:
+                continue
+            if include_user and not machine.owned_user:
+                continue
+            owned_machines[machine.name] = machine
+        return owned_machines
