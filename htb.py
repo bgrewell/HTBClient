@@ -21,21 +21,16 @@ if __name__ == '__main__':
     machines = client.machines()
     idx = 1
     for key, value in machines.items():
-        print(f'{idx}: {machines[key].name} (id={machines[key].identifier})')
+        print(
+            f'{idx}: {machines[key].name} (id={machines[key].identifier}) user={machines[key].owned_user} root={machines[key].owned_root}')
         idx += 1
 
-    player_two = machines['playertwo']
-    r = player_two.start()
-    print(r)
-    print(client.assigned())
-    time.sleep(5)
-    r = player_two.todo()
-    print(r)
-    time.sleep(5)
-    r = player_two.stop()
-    print(r)
-    print(client.terminating())
+    print('user owns:')
+    user_owns = client.user_owns()
+    for key, machine in user_owns.items():
+        print(f'name: {machine.name}\tpoints: {machine.points}')
 
-    print(client.todo())
-
-    print(client.expiry())
+    print('root owns:')
+    root_owns = client.root_owns()
+    for key, machine in root_owns.items():
+        print(f'name: {machine.name}\tpoints: {machine.points}')
