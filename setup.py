@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="HTBClient",
-    version="0.1.0",
+    version="0.2.0",
     author="Benjamin Grewell",
     author_email="bgrewelldev@gmail.com",
     description="A library to interact with the hackthebox.eu website",
@@ -14,8 +14,17 @@ setuptools.setup(
     url="https://github.com/BGrewell/HTBClient",
     packages=setuptools.find_packages(),
     classifiers=[
+        "Development Status :: Beta",
         "Programming Language :: Python :: 3",
-        "Operating System :: OS Independent",
+        "License :: OSI Approved :: Apache Software License",
+        "Operating System :: POSIX :: Linux",
+        "Natural Language :: English",
+        "Environment :: Console",
     ],
+    entry_points={
+      'console_script': [
+          'htb = HTBClient.__main__:main'
+      ]
+    },
     python_requires='>=3.6',
 )
