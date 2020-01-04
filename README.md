@@ -12,20 +12,60 @@ and creates a folder for each machine that is found on the site but not on the f
 files and scripts to help with tracking and controlling the machines. To find out more about the `HTB` project click on
 this link to visit the repository.
 
-#### Setting Username/Password
+### Setting Username/Password
 If you are using `HTBClient` as a module then you need to pass the username and password when you
 create your instance. When using `HTBClient` as a module it is recommended that you get your username
 and password from an environmental variable or some place other than hard-coding it in your source
 that way if you source is shared you do not accidentally publish your credentials as well.
 
-when running `htbclient.py` as a script you should set your credentials as environmental variables then
-run the script as normal. 
+when running the `htb` command from the terminal you should set your credentials as environmental variables then
+run the `htb` command as shown below
 
 Example
 ```
 export HTB_USER=bob@somewebsite.net
 export HTB_PASS=2jli9z9e2l34jlz98890@skx9!2a&
-python3 htbclient.py <command> <arguments>
+htb <arguments>
+```
+
+### Command Line Tool
+The command line tool `htb` has the following options
+
+```shell
+--assigned          # Show your currently assigned machine
+--list all          # Show all machines
+--list todo         # Show machines in your todo list
+--list spawned      # Show all machines that are currently running
+--list active       # Show all machines that have not been retired
+--list retired      # Show all machines that have been retired
+--list owned        # Show all machines that you have gotten root and user on
+--list roots        # Show all machines that you have gotten root on
+--list users        # Show all machines that you have gotten user on
+--list incomplete   # Show all machines that you have not yet owned
+--start <machine>   # Start the specified machine
+--stop              # Stop the machine assigned to you
+--reset <machine>   # Restart the specified machine
+--todo <machine>    # Toggle the specified machines todo status
+--username <user>   # HTB Username (only needed if you don't use variables)
+--password <pass>   # HTB Password (only needed if you don't use variables)
+```
+
+The command line tool is installed into the systems path as `htb` so you would execute the above commands as shown in
+the example below
+
+list all machines
+```shell
+htb --list all
+```
+
+list owned machines
+```shell
+htb --list owned
+```
+
+start the box Ellingson
+```shell
+htb --start ellingson
 ```
 
 ## Todo/Coming Soon
