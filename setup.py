@@ -23,9 +23,9 @@ setuptools.setup(
         "Intended Audience :: Information Technology",
     ],
     entry_points={
-      'console_script': [
-          'htb=HTBClient.__main__:main'
-      ]
+        'console_scripts': [
+            'htb=HTBClient.__main__:main'
+        ]
     },
     python_requires='>=3.6',
 )
