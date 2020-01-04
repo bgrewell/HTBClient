@@ -34,7 +34,9 @@ class Machine:
     def __repr__(self):
         return self.name
 
-    def __request_json(self, url, data={}):
+    def __request_json(self, url, data=None):
+        if data is None:
+            data = {}
         response = self.session.post(url, verify=self.verify_cert, data=data)
         print(f"status_code: {response.status_code}")
         print(f"response: {response.text}")
