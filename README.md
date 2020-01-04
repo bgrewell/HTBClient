@@ -1,8 +1,8 @@
 # HTBClient
-`HTBClient` is a python module that interfaces with the hackthebox.eu REST API. Since their API doesn't appear to be 
-complete there are features that are currently missing such as challenges. These will be added once they have REST
-endpoints but I have decided not to implement them now by scraping the site as I felt that would be too fragile and
-would add a significant amount of throw away code.
+`HTBClient` is a python module and a command line clinet that interfaces with the hackthebox.eu via their REST API. 
+Since their API doesn't appear to be complete there are features that are currently missing such as challenges. 
+These will be added once they have REST endpoints but I have decided not to implement them now by scraping the site as I 
+felt that would be too fragile and would add a significant amount of throw away code.
 
 ## Overview Video
 
