@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
-
 import os
-import time
+import sys
 import argparse
-from HTBClient import client
+from HTBClient import client as c
 
 
 def main():
@@ -11,7 +10,7 @@ def main():
     htb_user = os.getenv('HTB_USER')
     htb_pass = os.getenv('HTB_PASS')
 
-    parser = argparse.ArgumentParser(description='hackthebox.eu command line client')
+    parser = argparse.ArgumentParser(description='command line client for hackthebox.eu')
     parser.add_argument('--assigned', action='store_true', help='show your currently spawned machine')
     parser.add_argument('--start', type=str, help='start the specified machine')
     parser.add_argument('--stop', action='store_true', help='stops your spawned machine')
@@ -20,10 +19,14 @@ def main():
     parser.add_argument('--list', choices=['all', 'owned', 'todo', 'spawned', 'active', 'retired', 'incomplete',
                                            'roots', 'users', 'terminating'],
                         help='lists machine names and ip addresses')
-    parser.add_argument('--username', type=str, help='htb username <only needed if you dont have env variables>')
-    parser.add_argument('--password', type=str, help='htb username <only needed if you dont have env variables>')
+    parser.add_argument('--username', type=str, help='htb username')
+    parser.add_argument('--password', type=str, help='htb username')
 
     args = parser.parse_args()
+
+    if len(sys.argv) == 1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
 
     if (htb_user is None and args.username is None) or (htb_pass is None and args.password is None):
         print('[!] Error: Username and Password must be set in environmental variables.')
@@ -32,7 +35,7 @@ def main():
         print('export HTB_PASS=hopefullyagoodpassword')
         exit(-1)
 
-    client = client.Client()
+    client = c.Client()
     client.login(htb_user, htb_pass)
 
     if args.assigned:
