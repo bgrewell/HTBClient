@@ -6,12 +6,7 @@ import argparse
 from HTBClient import client
 
 
-def pretty_print(machines):
-    for key, value in machines.items():
-        value.pretty_basic()
-
-
-if __name__ == '__main__':
+def main():
 
     htb_user = os.getenv('HTB_USER')
     htb_pass = os.getenv('HTB_PASS')
@@ -97,3 +92,12 @@ if __name__ == '__main__':
             pretty_print(terminating_machines)
         else:
             pretty_print(client.machines())
+
+
+def pretty_print(machines):
+    for key, value in machines.items():
+        value.pretty_basic()
+
+
+if __name__ == '__main__':
+    main()
