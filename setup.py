@@ -14,12 +14,13 @@ setuptools.setup(
     url="https://github.com/BGrewell/HTBClient",
     packages=setuptools.find_packages(),
     classifiers=[
-        "Development Status :: Beta",
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: Apache Software License",
         "Operating System :: POSIX :: Linux",
         "Natural Language :: English",
         "Environment :: Console",
+        "Intended Audience :: Information Technology",
     ],
     entry_points={
       'console_script': [
