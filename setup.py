@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="HTBClient",
-    version="0.2.3",
+    version="0.3.0",
     author="Benjamin Grewell",
     author_email="bgrewelldev@gmail.com",
     description="A command line client and library to interact with the hackthebox.eu website",
