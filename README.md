@@ -6,7 +6,7 @@ felt that would be too fragile and would add a significant amount of throw away 
 
 ## Overview Video
 
-`insert youtube link here`
+[View a demonstration video on YouTube](https://youtu.be/A7cKpKRJFbI)
 
 ## Installation
 There are several options for installation, i'll cover the common ones below. 
