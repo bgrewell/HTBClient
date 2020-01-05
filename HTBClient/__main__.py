@@ -2,7 +2,8 @@
 import os
 import sys
 import argparse
-from HTBClient.client import Client
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))      # Hack to allow import to work even in dev
+from client import Client
 
 
 def main():
