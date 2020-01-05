@@ -1,14 +1,12 @@
 import os
-import json
-import time
 import requests
 from bs4 import BeautifulSoup
-from HTBClient.machine import Machine
-from HTBClient.machinedetails import MachineDetails
-from HTBClient.own import Own
-from HTBClient.spawned import Spawned
-from HTBClient.assigned import Assigned
-from HTBClient.terminating import Terminating
+from HTBClient.models.machine import Machine
+from HTBClient.models.machinedetails import MachineDetails
+from HTBClient.models.own import Own
+from HTBClient.models.spawned import Spawned
+from HTBClient.models.assigned import Assigned
+from HTBClient.models.terminating import Terminating
 
 
 class Client(object):

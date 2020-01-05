@@ -66,9 +66,12 @@ class Machine:
         return m
 
     def pretty_basic(self):
-        print(f"machine: {self.name}")
-        print(f"ip: {self.ip}")
-        print(f"id: {self.identifier}")
+        print(f"[+] {self.name}")
+        print(f"\tid: {self.identifier}")
+        print(f"\tip: {self.ip}")
+        print(f"\tos: {self.operating_system}")
+        print(f"\tpoints: {self.points}")
+        print(f"\trelease: {self.release}")
 
     def start(self):
         url = 'https://www.hackthebox.eu/api/vm/vip/assign/{id}'.format(id=self.identifier)

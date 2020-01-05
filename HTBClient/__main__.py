@@ -2,7 +2,7 @@
 import os
 import sys
 import argparse
-from HTBClient import client as c
+from HTBClient.client import Client
 
 
 def main():
@@ -35,7 +35,7 @@ def main():
         print('export HTB_PASS=hopefullyagoodpassword')
         exit(-1)
 
-    client = c.Client()
+    client = Client()
     client.login(htb_user, htb_pass)
 
     if args.assigned:
